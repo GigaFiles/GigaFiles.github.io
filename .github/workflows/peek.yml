@@ -1,0 +1,56 @@
+name: 参观 Ubuntu 虚拟机
+
+on:
+  workflow_dispatch:          # 允许在网页上手动点按钮触发
+
+jobs:
+  peek:
+    runs-on: ubuntu-latest    # GitHub 免费发给你的 Ubuntu 机器
+    steps:
+      - name: 我是谁 / 系统版本
+        run: |
+          echo "===== 主机名 ====="
+          hostname
+          echo "===== 系统版本 ====="
+          cat /etc/os-release
+          echo "===== 内核 ====="
+          uname -a
+          echo "===== 当前用户 ====="
+          whoami
+
+      - name: CPU 信息
+        run: |
+          echo "===== CPU 核心数 ====="
+          nproc
+          echo "===== CPU 型号 ====="
+          lscpu | grep -E "Model name|CPU\(s\)|MHz"
+
+      - name: 内存
+        run: free -h
+
+      - name: 磁盘
+        run: df -h
+
+      - name: 网络 / 公网 IP
+        run: |
+          echo "===== 网卡 ====="
+          ip addr
+          echo "===== 这台机器的公网 IP ====="
+          curl -s https://ifconfig.me
+          echo ""
+
+      - name: 预装了哪些软件
+        run: |
+          echo "===== 版本一览 ====="
+          python3 --version
+          node --version
+          docker --version
+          git --version
+          echo "===== 当前目录 ====="
+          pwd
+          ls -la
+
+      - name: 做点事写回仓库
+        run: |
+          echo "这台机器在 $(date) 被参观过一次,公网IP: $(curl -s https://ifconfig.me)" >> visit_log.txt
+          cat visit_log.txt
