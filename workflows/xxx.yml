@@ -1,0 +1,15 @@
+name: 每天自动跑一次
+on:
+  schedule:
+    - cron: '0 0 * * *'      # 每天 UTC 00:00 触发(定时任务)
+  workflow_dispatch:          # 也允许网页上手动点按钮触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest    # GitHub 免费给你一台 Ubuntu 虚拟机
+    steps:
+      - uses: actions/checkout@v4       # 拉取你的代码
+      - name: 跑点东西
+        run: |
+          echo "在云端执行任意命令"
+          python script.py
